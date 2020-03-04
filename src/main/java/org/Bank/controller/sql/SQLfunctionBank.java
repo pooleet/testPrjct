@@ -53,6 +53,7 @@ public class SQLfunctionBank {
             while (res.next()) {
 
                 countMoney = res.getDouble("acct");
+                System.out.println(" на счету " + countMoney+ "   "+sql);
             }
         } catch (Exception e) {
             System.out.println(e + " узнать счет клиена  " + sql);

@@ -162,21 +162,23 @@ public class App {
             System.out.println(cList.size());
             System.out.println("Выберите счет для оплаты");
             for (int l = 0; l < cList.size(); l++) {
-                System.out.println(l+1+" "+cList.get(l).getSchet() + " " + cList.get(l).getName());
+                System.out.println(l + 1 + " " + cList.get(l).getSchet() + " " + cList.get(l).getName());
             }
             System.out.print(":");
             int index = scanner.nextInt();
 
             if (index < 1 || index > cList.size()) {
                 System.out.println("Диапозон ввода 1-" + cList.size());
-                j =3;
-            }
-            else if (client.setPIN(id, pin)){
+                j = 3;
+            } else if (client.setPIN(id, pin)) {
                 // выставить счет. вызывает рандомное значение
                 double random_number2 = 1 + (double) (Math.random() * 10000);
-                random_number2= (Double)Math.floor(random_number2*100)/100.0;
-
-
+                random_number2 = (Double) Math.floor(random_number2 * 100) / 100.0;
+                System.out.println("к оплате:"+random_number2);
+                if (client.getCountMoneyBank(id, random_number2)) {
+                    System.out.println(" (ЗАПРОС ИЗ БАНКА)денег хватит можно снимать" + random_number2);
+                }
+                else System.out.println(" На вашем счету недостаточно средств");
 
 
             }
