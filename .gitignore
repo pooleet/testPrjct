@@ -3,6 +3,9 @@
 *.iws
 lib/
 
+scr/test/
+src/main/java/org/example/ClientMain.java
+
 # Maven
 log/
 target/
