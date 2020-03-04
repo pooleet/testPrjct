@@ -140,7 +140,7 @@ public class App {
                     boolean status = client.setPIN(id, pin);
                     if (status) {
                         client.saveDataClient(id, (setMoney ), id, 0);
-                        System.out.print("Деньги в банке:");
+                        System.out.print("Деньги в банке :");
                     }
 
 
