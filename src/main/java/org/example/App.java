@@ -99,7 +99,7 @@ public class App {
                         if (client.getMoneyTank((int) getMoney)) {
                             int y = 0;
                             Timer timer = new Timer();
-                            System.out.println("1 забрать деньги\nчерез 10 секунд завершится сеанс\n: ");
+                            System.out.print("1 забрать деньги\nчерез 10 секунд завершится сеанс\n: ");
                             timer.schedule(task, 10 * 1000);
 
                             otvet = scanner.nextInt();
