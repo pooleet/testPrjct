@@ -112,7 +112,7 @@ public class SQLfunctionBank {
         double schet = 0;
         try {
             ResultSet res = (ResultSet) stmnt.executeQuery(sql);
-            System.out.println("Получили состояние счета " + sql);
+          //  System.out.println("Получили состояние счета " + sql);
             while (res.next()) {
 
                 schet = res.getDouble("acct");

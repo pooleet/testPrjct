@@ -2,11 +2,13 @@ package org.example.controller;
 
 
 import org.example.App;
+import org.example.model.Company;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 // взаимодействие клинета с банкоматом
 public class Client {
@@ -67,8 +69,16 @@ public class Client {
     }
 
     // обновлям данные о счете клиента
-    public void saveDataClient(int id, double v, int id1, int i) throws RemoteException, SQLException, ClassNotFoundException, NotBoundException {
-        new ATM().saveDataClient(id,  v,  id1,  i);
+    public boolean saveDataClient(int id, double v, int id1, int i) throws RemoteException, SQLException, ClassNotFoundException, NotBoundException {
+      boolean statusSave;
+        statusSave= new ATM().saveDataClient(id,  v,  id1,  i);
+        return statusSave;
 
+    }
+
+    public ArrayList<Company> setSearch(String name) throws SQLException, ClassNotFoundException {
+
+        ArrayList<Company> listC= new ATM().getCompanyList(name);
+        return listC;
     }
 }

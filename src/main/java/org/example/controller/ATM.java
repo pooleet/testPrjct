@@ -5,6 +5,7 @@ import org.Md5Encryp;
 import org.example.controller.atm.SqlATM;
 import org.example.controller.tank.ATMTankDate;
 import org.example.model.ATMTank;
+import org.example.model.Company;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -18,10 +19,17 @@ import java.util.ArrayList;
 public class ATM implements ATMFunction {
     public static final String UNIQUE_BINDING_NAME = "server.bank";
 
+
     private SqlATM sql;
 
     public ATM() {
         sql = new SqlATM();
+    }
+
+
+    //поиск компаний для оплаты счета
+    public  ArrayList<Company> getCompanyList(String name) throws SQLException, ClassNotFoundException {
+        return sql.getNameCompany(name);
     }
 
     @Override
@@ -105,12 +113,13 @@ public class ATM implements ATMFunction {
     }
   //подключючаемся к банку и передаем значения,
   // получаем положительгый или отрицательный результат добавления
-    public void saveDataClient(int id, double v, int id1, int i) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException{
+    boolean saveDataClient(int id, double v, int id1, int i) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException{
         final Registry registry = LocateRegistry.getRegistry(2732);
         UserData userdata;
         userdata = (UserData) registry.lookup(UNIQUE_BINDING_NAME);
         boolean tranzRemover;
         // записываем снятие денег со счета
-        userdata.SaveTransactionRemover(id, v);
+        tranzRemover= userdata.SaveTransactionRemover(id, v);
+        return tranzRemover;
     }
 }
