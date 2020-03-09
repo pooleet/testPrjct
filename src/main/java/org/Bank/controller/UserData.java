@@ -14,4 +14,6 @@ public interface UserData extends Remote {
     // снять деньги
     boolean SaveTransactionRemover (int id, double money) throws RemoteException, SQLException, ClassNotFoundException;
 
+    // перевести деньги между счетами
+    boolean PayTransactionRemover (int id, double money, int idBill) throws RemoteException, SQLException, ClassNotFoundException;
 }

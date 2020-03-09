@@ -37,7 +37,7 @@ public class SQLfunctionBank {
     }
 
 
-    public double CountMoney(int idcart) throws SQLException, ClassNotFoundException {
+ /*   public double CountMoney(int idcart) throws SQLException, ClassNotFoundException {
         Connection conn = MySQLConnUtils.getMySQLConnection();
 
         Statement stmnt = conn.createStatement();
@@ -53,14 +53,14 @@ public class SQLfunctionBank {
             while (res.next()) {
 
                 countMoney = res.getDouble("acct");
-                System.out.println(" на счету " + countMoney+ "   "+sql);
+                System.out.println(" на счету " + countMoney + "   " + sql);
             }
         } catch (Exception e) {
             System.out.println(e + " узнать счет клиена  " + sql);
         }
 
         return countMoney;
-    }
+    }*/
 
     // снятие денег со счета
     public boolean SaveTrRem(int idCart, double money) throws SQLException, ClassNotFoundException {
@@ -83,7 +83,7 @@ public class SQLfunctionBank {
         return true;
     }
 
-    // получаем id со счета
+    // получаем id со счета idbILL
     public int getBill(int id) throws SQLException, ClassNotFoundException {
         Connection conn = MySQLConnUtils.getMySQLConnection();
         Statement stmnt = conn.createStatement();
@@ -106,14 +106,14 @@ public class SQLfunctionBank {
     }
 
     // получаем состояние счета клиента
-    public double getCustomerAccount(int id) throws SQLException, ClassNotFoundException {
+    public double getCustomerAccount(int idBill) throws SQLException, ClassNotFoundException {
         Connection conn = MySQLConnUtils.getMySQLConnection();
         Statement stmnt = conn.createStatement();
-        sql = "select acct from scoreMove where idBill in (select idBill from bank where IDCard=" + id + " ) order by id desc limit 1";
+        sql = "select acct from scoreMove where idBill = " + idBill + " order by id desc limit 1";
         double schet = 0;
         try {
             ResultSet res = (ResultSet) stmnt.executeQuery(sql);
-          //  System.out.println("Получили состояние счета " + sql);
+            //  System.out.println("Получили состояние счета " + sql);
             while (res.next()) {
 
                 schet = res.getDouble("acct");
@@ -126,5 +126,38 @@ public class SQLfunctionBank {
         return schet;
     }
 
+    //  оплачиваем счет
+    public boolean payTransaction(int idCart, double money, int idBill) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        String sql2 = "";
+        // определяем cчет карты
+        int id = getBill(idCart);
+        // изначальное количество денег на счете отправителя
+        double billstart1 = getCustomerAccount(id) + (money * -1);
+        // тут отнимаем
+        String sql1 = "INSERT into scoreMove (date,idBill,cMoney,toFrom,acct) values (now()," + id + "," + (money * -1) + "," + idBill + "," + billstart1 + ");";
 
+
+        double billstart2 = getCustomerAccount(idBill) + money;
+
+        // тут прибавляем
+        sql2 = "INSERT into scoreMove (date,idBill,cMoney,toFrom,acct) values (now()," + idBill + "," + money + "," + id + "," + billstart2 + ");";
+        try {
+            conn = MySQLConnUtils.getMySQLConnection();
+            Statement stmnt1 = conn.createStatement();
+            conn.setAutoCommit(false);
+           stmnt1.executeUpdate(sql1);
+            stmnt1.executeUpdate(sql2);
+            conn.commit();
+
+        } catch (SQLException e) {
+            System.out.println(e + " Ошибка перевода денег на счет компании \n" + sql1 + "\n" + sql2);
+            conn.rollback();
+            return false;
+            // e.printStackTrace();
+    }
+
+        conn.close();
+        return true;
+    }
 }

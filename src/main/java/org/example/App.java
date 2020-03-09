@@ -150,7 +150,7 @@ public class App {
 // оплатить счет
         if (j == 3) {
             j = -1;
-            System.out.println("Фирмы из базы\n" +
+            System.out.println("_ПОИСК_ Фирмы из базы\n" +
                     "4	71100542424788331000	ООО Рога\n" +
                     "5	60200102326110061200	ООО Копыта\n" +
                     "6	40030920073004497368	ООО Исток");
@@ -172,22 +172,38 @@ public class App {
                 j = 3;
             } else if (client.setPIN(id, pin)) {
                 // выставить счет. вызывает рандомное значение
-                double random_number2 = 1 + (double) (Math.random() * 10000);
-                random_number2 = (Double) Math.floor(random_number2 * 100) / 100.0;
-                System.out.println("к оплате:"+random_number2);
+                double random_number2 = 1 + (Math.random() * 10000);
+                random_number2 = Math.floor(random_number2 * 100) / 100.0;
+
+                System.out.println("к оплате:" + random_number2);
                 if (client.getCountMoneyBank(id, random_number2)) {
-                    System.out.println(" (ЗАПРОС ИЗ БАНКА)денег хватит можно снимать" + random_number2);
-                }
-                else System.out.println(" На вашем счету недостаточно средств");
+                    System.out.println(" (ЗАПРОС ИЗ БАНКА)денег хватит можно оплатить " + random_number2);
+
+                    // отправляем данные о переводе номер карты,количество денег, номер счета куда переводим
+                    System.out.println(client.setPayDate(id, random_number2, cList.get(index - 1).getId()));
+
+                    // получим чек выходим
+                    i = 0;
+
+                } else System.out.println(" На вашем счету недостаточно средств");
+
+                i = 0;
+            }
+
+
+        }
+// сколько денег осталось а счете
+        if (j == 4) {
+            j = -1;
+            if (client.setPIN(id, pin)) {
 
 
             }
 
         }
-
         if (i == 0) {
             System.out.println("Заберите карту");
-            System.out.println("Выходим");
+            System.out.println("Выход");
         }
 
     }

@@ -70,15 +70,34 @@ public class Client {
 
     // обновлям данные о счете клиента
     public boolean saveDataClient(int id, double v, int id1, int i) throws RemoteException, SQLException, ClassNotFoundException, NotBoundException {
-      boolean statusSave;
-        statusSave= new ATM().saveDataClient(id,  v,  id1,  i);
+        boolean statusSave;
+        statusSave = new ATM().saveDataClient(id, v, id1, i);
         return statusSave;
 
     }
 
     public ArrayList<Company> setSearch(String name) throws SQLException, ClassNotFoundException {
 
-        ArrayList<Company> listC= new ATM().getCompanyList(name);
+        ArrayList<Company> listC = new ATM().getCompanyList(name);
         return listC;
+    }
+
+    // отправляем команду банкомату об оплате счета
+    public String setPayDate(int id, double money, int id1) throws RemoteException, SQLException, ClassNotFoundException, NotBoundException {
+        boolean otvet = new ATM().getPaypayTransaction(id, money, id1);
+        if (otvet)
+            return "Счет оплачен";
+        else
+            return "Оплата не пропрошла";
+    }
+
+
+    // проверяем хватает ли на счету денег для снятия (обращаемся к серверу из ATM)
+    public String getCountMoneyBankString(int idCart, double money) throws RemoteException, SQLException, ClassNotFoundException, NotBoundException {
+        double bool = new ATM().getCountMoney(idCart);
+        // System.out.println("Денег на счету"+ bool);
+
+        String str = "На вашем счету : "+bool;
+        return str;
     }
 }

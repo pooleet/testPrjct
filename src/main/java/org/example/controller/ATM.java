@@ -122,4 +122,15 @@ public class ATM implements ATMFunction {
         tranzRemover= userdata.SaveTransactionRemover(id, v);
         return tranzRemover;
     }
+
+    public boolean getPaypayTransaction(int id, double money, int id1) throws RemoteException, NotBoundException, SQLException,  ClassNotFoundException {
+        final Registry registry = LocateRegistry.getRegistry(2732);
+        UserData userdata;
+        userdata = (UserData) registry.lookup(UNIQUE_BINDING_NAME);
+        boolean tranzPay;
+        // записываем снятие денег со счета
+        tranzPay= userdata.PayTransactionRemover(id, money,id1);
+        return tranzPay;
+
+    }
 }
