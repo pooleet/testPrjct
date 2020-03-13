@@ -3,6 +3,7 @@ package org.Bank;
 import org.Bank.controller.RemoteBankServer;
 import org.Bank.controller.sql.SQLbuild;
 
+import java.io.Serializable;
 import java.rmi.AlreadyBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -10,7 +11,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class ServerMain {
+
+public class ServerMain  {
 
 
 
@@ -19,7 +21,7 @@ public class ServerMain {
     // уникальное имя удаленного объекта. По этому имени программа-клиент сможет найти наш сервер
     public static final String UNIQUE_BINDING_NAME = "server.bank";
 
-    public static void main(String[] args) throws RemoteException, AlreadyBoundException, InterruptedException {
+    public static void main(String[] args) throws AlreadyBoundException, InterruptedException, RemoteException {
         new SQLbuild();
 
 // Далее мы создаем наш объект-калькулятор:

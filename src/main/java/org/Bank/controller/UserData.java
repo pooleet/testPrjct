@@ -3,6 +3,7 @@ package org.Bank.controller;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public interface UserData extends Remote {
     // пользователь активный?
@@ -16,4 +17,9 @@ public interface UserData extends Remote {
 
     // перевести деньги между счетами
     boolean PayTransactionRemover (int id, double money, int idBill) throws RemoteException, SQLException, ClassNotFoundException;
+
+    //последняя операция
+    String СhequeTransaction(int id)throws RemoteException, SQLException, ClassNotFoundException;
+
+
 }

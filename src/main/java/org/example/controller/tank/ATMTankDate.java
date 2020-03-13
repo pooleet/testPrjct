@@ -28,7 +28,7 @@ public class ATMTankDate {
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, list);
         String str = writer.toString().replace("[{", "{\"tank\":[{") + "}";
-       // System.out.println(str);
+        // System.out.println(str);
         FileWriter writerF = new FileWriter(path, false);
         writerF.write(str);
         writerF.flush();
@@ -36,9 +36,11 @@ public class ATMTankDate {
     }
 
     public static ArrayList<ATMTank> getCountBillTank(int countBill) throws IOException {
-        ArrayList<ATMTank> listFinish = new ArrayList<>();
+        ArrayList<ATMTank> listFinish = new ArrayList<ATMTank>();
         LinkedList<arraybank> list = new LinkedList();
         int sum = 0;
+
+        int sumK = 0;
         //сколько хотим снять
         //  System.out.println("сколько хотим снять  " + countBill);
         //int countbill = countBill;
@@ -58,11 +60,17 @@ public class ATMTankDate {
             } else {
                 count = list.get(i - 1).count - list.get(i - 1).sumKupura;
             }
+            // выбор купьры
             int kupura = mas[i];
+            // какой процент от суммы составляет
             int procent = (int) Math.floor(count / 100 * proc[i]);
+            // количесво купюр
             int countku = countTankcupure(i, (int) Math.ceil(procent / kupura));
+
+            // выделяем целое из получившегося количества купюр
             int sumKupura = kupura * countku;
             sum = sum + sumKupura;
+            sumK = sumK + countku;
             list.add(new arraybank(count, procent, kupura, countku, sumKupura));
             // System.out.println(list.get(i).count + "    |   " + list.get(i).procent + " |   " + list.get(i).kupura + "  |   " + list.get(i).countku + " |   " + list.get(i).sumKupura);
 
@@ -80,13 +88,15 @@ public class ATMTankDate {
             }
 
             if (sum == countBill) {
+                if (sumK <= 40) {
+                    for (arraybank arrb : list) {
+                        //  System.out.println(sum +"  "+arrb.kupura+" "+arrb.countku);
+                        listFinish.add(new ATMTank(arrb.kupura, arrb.countku));
 
-                for (arraybank arrb : list) {
-                    //  System.out.println(sum +"  "+arrb.kupura+" "+arrb.countku);
-                    listFinish.add(new ATMTank(arrb.kupura, arrb.countku));
-
+                    }return listFinish;
                 }
-                return listFinish;
+                else  System.out.println(">>>Количество купюр превышает допустимое начение<<<  ");
+
             }
         }
 

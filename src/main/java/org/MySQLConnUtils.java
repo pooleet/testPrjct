@@ -1,8 +1,12 @@
 package org;
 
+
+import com.mysql.cj.jdbc.Driver;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 
 public class MySQLConnUtils {
 
@@ -19,17 +23,16 @@ public class MySQLConnUtils {
     }
 
     public static Connection getMySQLConnection(String hostName, String dbName,
-                                                String userName, String password) throws SQLException,
-            ClassNotFoundException {
+                                                String userName, String password)   {
 
 
         String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false &serverTimezone=UTC";
         Connection conn = null;
         try {
-
-            Class.forName("com.mysql.cj.jdbc.Driver");//Проверяем наличие JDBC драйвера для работы с БД
-            conn = DriverManager.getConnection(connectionURL, userName,
-                    password);//соединениесБД
+            //
+          //  Driver driver = new com.mysql.cj.jdbc.Driver();
+           Class.forName("com.mysql.cj.jdbc.Driver");//Проверяем наличие JDBC драйвера для работы с БД
+            conn = DriverManager.getConnection(connectionURL, userName,  password);//соединениесБД
           //  System.out.println("Соединение с СУБД выполнено.");
 
             // conn.close();       // отключение от БД
@@ -38,7 +41,7 @@ public class MySQLConnUtils {
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace(); // обработка ошибки  Class.forName
-            System.out.println("JDBC драйвер для СУБД не найден!");
+            System.out.println(e + "  JDBC драйвер для СУБД не найден!");
         } catch (SQLException e) {
             e.printStackTrace(); // обработка ошибок  DriverManager.getConnection
             System.out.println("Ошибка SQL !");

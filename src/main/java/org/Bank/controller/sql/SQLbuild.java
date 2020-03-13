@@ -1,6 +1,6 @@
 package org.Bank.controller.sql;
 
-import com.mysql.cj.protocol.Resultset;
+
 import org.Md5Encryp;
 import org.MySQLConnUtils;
 
@@ -96,7 +96,7 @@ stmnt.executeUpdate("drop table bill");*/
 // выбираем те номера счетов которых нет в таблице операции по счету
                 try {
                     Statement stmnt2 = conn.createStatement();
-                    ResultSet res2 = (ResultSet) stmnt.executeQuery("select id from bill where id not in (select distinct idBill from scoreMove);");
+                    ResultSet res2 = stmnt.executeQuery("select id from bill where id not in (select distinct idBill from scoreMove);");
                     while (res2.next()) {
 
                         int id = res2.getInt("id");
@@ -131,7 +131,7 @@ stmnt.executeUpdate("drop table bill");*/
         Statement stmnt = conn.createStatement();
 
         try {
-            Resultset res = (Resultset) stmnt.executeQuery("select * from " + tablestr + "");
+            ResultSet res = (ResultSet)  stmnt.executeQuery("select * from " + tablestr + "");
             // res = stmnt.executeQuery(res);
             System.out.println("Таблица " + tablestr + " уже создана");
         } catch (SQLException exc) {

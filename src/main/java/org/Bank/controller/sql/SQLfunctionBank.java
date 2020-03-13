@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class SQLfunctionBank {
     private String sql;
@@ -146,7 +147,7 @@ public class SQLfunctionBank {
             conn = MySQLConnUtils.getMySQLConnection();
             Statement stmnt1 = conn.createStatement();
             conn.setAutoCommit(false);
-           stmnt1.executeUpdate(sql1);
+            stmnt1.executeUpdate(sql1);
             stmnt1.executeUpdate(sql2);
             conn.commit();
 
@@ -155,9 +156,45 @@ public class SQLfunctionBank {
             conn.rollback();
             return false;
             // e.printStackTrace();
-    }
+        }
 
         conn.close();
         return true;
+    }
+
+    // получаемданные для чека
+    public String chequeTransaction(int id) {
+
+        String arr = "";
+        String sql = "  select a1.id, a1.Date, a1.cMoney, a1.acct, a2.IDBill ab1, a3.IDBill ab2 from scoreMove a1 \n" +
+                "   inner join bill a2 on a1.idBill=a2.Id  \n" +
+                "   inner join bill a3 on a1.toFrom=a3.Id  \n" +
+                "   where a1.id = (select max(id) from scoreMove where IDBill=(select idBill from card where id=" + id +"))  ;";
+        try {
+            Connection conn = MySQLConnUtils.getMySQLConnection();
+            Statement stmnt = conn.createStatement();
+            ResultSet res = stmnt.executeQuery(sql);
+            System.out.println(sql);
+            int i = 0;
+            while (res.next()) {
+           /*   arr.add(res.getString("id"));
+               arr.add(res.getString("Date"));
+
+                arr.add(res.getString("acct"));
+                arr.add(res.getString("cMoney"));
+                arr.add(res.getString("ab1"));
+                arr.add(res.getString("ab2"));*/
+
+                arr = res.getString("id") + ";" + res.getString("Date") + ";" + res.getString("acct") + ";" + res.getString("cMoney") + ";" + res.getString("ab1") + ";" + res.getString("ab2");
+
+                //  i++;
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println(e + " Ошибка получения данных для чека " + sql);
+        }
+
+
+        return arr;
     }
 }

@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.controller.Client;
+import org.example.controller.Сheque;
 import org.example.model.Company;
 
 import java.io.IOException;
@@ -39,22 +40,22 @@ public class App {
         }
     };
 
-    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException, InterruptedException, NotBoundException {
+    public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
 
 
         System.out.println("Здравсвуйте!");
-        System.out.println("             Зарегистрированые карты 1-1234, 2-истек срок годности, 3-1234 (неверный PIN)");
+        System.out.println("             Зарегистрированые карты 1-1234, 2-истек срок годности, 3-1234 (неверный PIN), 4-3254");
 
 
         ConttrollerAct(1);
 
     }
 
-    public static void ConttrollerAct(int i) throws SQLException, ClassNotFoundException, IOException, InterruptedException, NotBoundException {
+    public static void ConttrollerAct(int i) throws Exception {
         Scanner scanner = new Scanner(System.in);
         //scanner.findInLine(".{6}");
-
+        Сheque che = new Сheque();
 
         if (i == 1) {
             //проверка карты
@@ -86,7 +87,7 @@ public class App {
                 System.out.println("Сумма не кратна 100, повторите попытку");
                 j = 1;
             } else {
-                System.out.print("Чек на экран(1) или распечатать(2)\n:");
+                System.out.print("1 Чек на экран\n2 распечатать чек\n:");
                 int check = scanner.nextInt();
                 // проверяем PIN
                 boolean status = client.setPIN(id, pin);
@@ -109,6 +110,7 @@ public class App {
                                 // (Клиент, сколько снимаем, куда снимаем, №счета)
                                 client.saveDataClient(id, (getMoney * -1), id, 0);
                                 client.saveData();
+                                check(check, che.СhequeOtvet(check, 1, client.getСhequeArr(id)));
                                 i = 0;
                             }
                         }
@@ -141,7 +143,7 @@ public class App {
                 if (status && client.saveDataClient(id, (setMoney), id, 0)) {
 
                     System.out.println("Транзакция прошла успешно");
-                    //получаем чек
+                    check(check, che.СhequeOtvet(check, 2, client.getСhequeArr(id)));
                     i = 0;
                 } else System.out.print("Транзакция прошла неудачно");
             }
@@ -166,22 +168,25 @@ public class App {
             }
             System.out.print(":");
             int index = scanner.nextInt();
-
+            int check = 0;
             if (index < 1 || index > cList.size()) {
                 System.out.println("Диапозон ввода 1-" + cList.size());
                 j = 3;
+
             } else if (client.setPIN(id, pin)) {
+                System.out.print("1 Чек на экран\n2 распечатать чек\n:");
+                check = scanner.nextInt();
                 // выставить счет. вызывает рандомное значение
                 double random_number2 = 1 + (Math.random() * 10000);
                 random_number2 = Math.floor(random_number2 * 100) / 100.0;
 
-                System.out.println("к оплате:" + random_number2);
+                System.out.println("К оплате:" + random_number2);
                 if (client.getCountMoneyBank(id, random_number2)) {
                     System.out.println(" (ЗАПРОС ИЗ БАНКА)денег хватит можно оплатить " + random_number2);
 
                     // отправляем данные о переводе номер карты,количество денег, номер счета куда переводим
                     System.out.println(client.setPayDate(id, random_number2, cList.get(index - 1).getId()));
-
+                    check(check, che.СhequeOtvet(check, 3, client.getСhequeArr(id)));
                     // получим чек выходим
                     i = 0;
 
@@ -195,16 +200,26 @@ public class App {
 // сколько денег осталось а счете
         if (j == 4) {
             j = -1;
+            System.out.print("1 Чек на экран\n2 распечатать чек\n:");
+            int check = scanner.nextInt();
             if (client.setPIN(id, pin)) {
-
+            check(check, che.СhequeOtvet(check, 4, client.getСhequeArr(id)));
 
             }
-
+            i = 0;
         }
         if (i == 0) {
             System.out.println("Заберите карту");
             System.out.println("Выход");
         }
+
+    }
+
+    public static void check(int check, String str) {
+
+        if (check == 1) {
+            System.out.println(str);
+        } else System.out.println("Заберите чек");
 
     }
 

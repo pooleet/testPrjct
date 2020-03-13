@@ -17,7 +17,7 @@ public class Client {
     }
 
     //срок действия карты
-    public void insertcard(int id) throws SQLException, ClassNotFoundException, IOException, InterruptedException, NotBoundException {
+    public void insertcard(int id) throws Exception {
         // System.out.println("Вставьте карту");
         if (!new ATM().activeDate(id)) {
             System.out.println("Срок действия карты №" + id + " истек");
@@ -44,7 +44,7 @@ public class Client {
     }
 
     // проверяем хватает ли на счету денег для снятия (обращаемся к серверу из ATM)
-    public boolean getCountMoneyBank(int idCart, double money) throws RemoteException, SQLException, ClassNotFoundException, NotBoundException {
+    public boolean getCountMoneyBank(int idCart, double money) throws Exception {
         double bool = new ATM().getCountMoney(idCart);
         // System.out.println("Денег на счету"+ bool);
         return money <= bool;
@@ -93,11 +93,17 @@ public class Client {
 
 
     // проверяем хватает ли на счету денег для снятия (обращаемся к серверу из ATM)
-    public String getCountMoneyBankString(int idCart, double money) throws RemoteException, SQLException, ClassNotFoundException, NotBoundException {
+    public String getCountMoneyBankString(int idCart) throws Exception {
         double bool = new ATM().getCountMoney(idCart);
         // System.out.println("Денег на счету"+ bool);
 
-        String str = "На вашем счету : "+bool;
+        String str = "На вашем счету : " + bool;
         return str;
+    }
+
+    // спросить банк о последней операции
+    public ArrayList<String> getСhequeArr(int id) throws Exception {
+        ArrayList<String> arr = new ATM().getСhequeBank(id);
+        return arr;
     }
 }
